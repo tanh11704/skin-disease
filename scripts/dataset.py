@@ -8,13 +8,6 @@ from constants import label_mapping
 
 class SkinDiseaseDataset(Dataset):
     def __init__(self, data_dir, transform=None, mode='train'):
-        """
-        Args:
-            data_dir (string): Đường dẫn đến thư mục dữ liệu
-            class_names (list): Danh sách các tên lớp bệnh
-            transform (callable, optional): Các biến đổi áp dụng cho ảnh
-            mode (string): 'train' hoặc 'test'
-        """
         self.data_dir = data_dir
         self.mode = mode
         self.class_names = list(label_mapping.keys())
@@ -23,8 +16,7 @@ class SkinDiseaseDataset(Dataset):
         self.image_paths = []
         self.labels = []
         
-        # Đọc tất cả các ảnh và nhãn
-        for class_idx, class_name in enumerate(class_names):
+        for class_idx, class_name in enumerate(self.class_names):
             class_dir = os.path.join(data_dir, mode, class_name)
             if not os.path.exists(class_dir):
                 continue
@@ -83,14 +75,9 @@ def create_weighted_sampler(dataset):
     for _, label in dataset:
         class_counts[label] += 1
     
-    # Tránh chia cho 0
     class_counts = np.maximum(class_counts, 1)
-    
-    # Tính trọng số nghịch đảo
     weights = 1.0 / class_counts
     sample_weights = np.array([weights[label] for _, label in dataset])
-    
-    # Chuẩn hóa trọng số
     sample_weights = torch.from_numpy(sample_weights).float()
     sample_weights = sample_weights / sample_weights.sum() * len(sample_weights)
     
