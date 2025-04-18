@@ -12,7 +12,7 @@ def get_args():
     parser = ArgumentParser(description="CNN inference")
     parser.add_argument("--image-path", "-p", type=str, required=True, help="Path to the test image")
     parser.add_argument("--image-size", "-i", type=int, default=224, help="Image size")
-    parser.add_argument("--checkpoint", "-c", type=str, default="trained_models/best_cnn.pt", help="Path to model checkpoint")
+    parser.add_argument("--checkpoint", "-c", type=str, default="models/best_cnn.pt", help="Path to model checkpoint")
     return parser.parse_args()
 
 if __name__ == '__main__':

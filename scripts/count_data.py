@@ -3,6 +3,8 @@ import os
 from collections import defaultdict
 from constants import label_mapping  # Import label_mapping từ infer.py
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('TkAgg')  # Sử dụng backend không cần GUI
 import numpy as np
 
 def count_data_in_directory(data_dir):
@@ -82,8 +84,8 @@ def plot_data_distribution(train_counts, test_counts):
 
 if __name__ == "__main__":
     # Đường dẫn đến thư mục train và test
-    train_dir = "data/train"
-    test_dir = "data/test"
+    train_dir = "../data/train"
+    test_dir = "../data/test"
     
     # Đếm số lượng file
     train_counts = count_data_in_directory(train_dir)

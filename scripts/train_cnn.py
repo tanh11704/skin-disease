@@ -2,9 +2,7 @@ import os.path
 import torch
 import torch.optim as optim
 from models import SkinDiseaseModel
-from torch.utils.data import DataLoader
 import torch.nn as nn
-from torchvision.transforms import Compose, Resize, ToTensor, Normalize
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 from argparse import ArgumentParser
 from tqdm.autonotebook import tqdm
@@ -14,12 +12,14 @@ import matplotlib.pyplot as plt
 import shutil
 import dataset
 from constants import label_mapping
+import matplotlib
+matplotlib.use('TkAgg')
 
 def get_args():
     parser = ArgumentParser(description="CNN training")
     parser.add_argument("--root", "-r", type=str, default="./data", help="Root of the dataset")
     parser.add_argument("--epochs", "-e", type=int, default=100, help="Number of epochs")
-    parser.add_argument("--batch-size", "-b", type=int, default=8, help="Batch size")
+    parser.add_argument("--batch-size", "-b", type=int, default=32, help="Batch size")
     parser.add_argument("--image-size", "-i", type=int, default=224, help="Image size")
     parser.add_argument("--logging", "-l", type=str, default="tensorboard")
     parser.add_argument("--trained_models", "-t", type=str, default="trained_models")
@@ -60,8 +60,8 @@ if __name__ == '__main__':
     writer = SummaryWriter(args.logging)
     model = SkinDiseaseModel(num_classes=len(label_mapping.keys())).to(device)
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-4)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=3, verbose=True)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001, weight_decay=1e-4)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=2, verbose=True)
 
     if args.checkpoint:
         checkpoint = torch.load(args.checkpoint, map_location=device)
@@ -77,6 +77,13 @@ if __name__ == '__main__':
     patience_counter = 0
 
     for epoch in range(start_epoch, args.epochs):
+        if epoch == 5:  # Mở layer4 sau 5 epoch
+            for name, param in model.model.named_parameters():
+                if 'layer4' in name or 'fc' in name:
+                    param.requires_grad = True
+                else:
+                    param.requires_grad = False
+        print('Đã mở khóa layer4 để tinh chỉnh')
         model.train()
         running_loss = 0.0
         progress_bar = tqdm(train_loader, colour="green")
