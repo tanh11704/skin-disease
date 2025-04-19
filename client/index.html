@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chẩn đoán bệnh ngoài da</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>DERMASCOPE</h1>
+        <p>Hệ thống chẩn đoán bệnh ngoài da thông minh bằng công nghệ AI</p>
+    </div>
+    
+    <div class="main-container">
+        <div class="diagnosis-column">
+            <!-- Phần upload ảnh -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-camera"></i>
+                    <h2>Tải ảnh lên</h2>
+                </div>
+                
+                <div class="upload-area" id="dropArea">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <p>Kéo thả ảnh hoặc nhấn vào đây để chọn ảnh</p>
+                    <p class="small text-muted">Hỗ trợ: JPG, PNG, JPEG</p>
+                    <input type="file" id="skinImage" accept="image/*" style="display: none;">
+                </div>
+                
+                <img id="imagePreview" alt="Ảnh xem trước">
+                
+                <button class="btn" id="diagnoseBtn" onclick="diagnose()">
+                    <i class="fas fa-search"></i> Chẩn đoán ngay
+                </button>
+            </div>
+
+            <!-- Phần hiển thị kết quả -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-clipboard-check"></i>
+                    <h2>Kết quả chẩn đoán</h2>
+                </div>
+                
+                <div id="loader" class="loader">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                
+                <div id="resultContainer" style="display: none;">
+                    <div class="result-box">
+                        <p class="result-title">Bệnh được phát hiện:</p>
+                        <p class="disease-name" id="diseaseName">-</p>
+                        <span class="confidence" id="confidenceLevel">-</span>
+                    </div>
+                    
+                    <img id="resultImage" alt="Hình ảnh mô tả bệnh">
+                    
+                    <div id="diseaseInfo" style="margin-top: 20px;">
+                        <h3>Thông tin về bệnh</h3>
+                        <p id="diseaseDescription"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right column for chat -->
+        <div class="chat-column">
+            <div class="card chat-card">
+                <div class="card-header">
+                    <i class="fas fa-comments"></i>
+                    <h2>Tư vấn giải pháp</h2>
+                </div>
+                
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot-message">
+                        Xin chào! Tôi là trợ lý AI Y tế. Tôi có thể giúp gì cho bạn về vấn đề da liễu?
+                    </div>
+                </div>
+                
+                <div class="chat-input-container">
+                    <input type="text" id="chatInput" placeholder="Nhập câu hỏi..." onkeypress="if(event.keyCode === 13) sendMessage()">
+                    <button class="btn send-btn" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Phần thông tin bệnh da liễu phổ biến -->
+    <div class="info-section">
+        <h2>Bệnh da liễu phổ biến</h2>
+        <p>Tìm hiểu về các bệnh da liễu phổ biến tại Việt Nam và cách phòng ngừa:</p>
+        
+        <div class="disease-grid">
+            <div class="disease-card">
+                <img src="/api/placeholder/400/200" alt="Bệnh vảy nến">
+                <div class="disease-card-content">
+                    <h3>Vảy nến</h3>
+                    <p>Bệnh da mãn tính với các mảng da đỏ, dày và có vảy bạc.</p>
+                    <a href="#" class="read-more">Tìm hiểu thêm <i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="disease-card">
+                <img src="/api/placeholder/400/200" alt="Bệnh chàm">
+                <div class="disease-card-content">
+                    <h3>Chàm (Eczema)</h3>
+                    <p>Viêm da gây ngứa, đỏ và khô, thường liên quan đến dị ứng.</p>
+                    <a href="#" class="read-more">Tìm hiểu thêm <i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="disease-card">
+                <img src="/api/placeholder/400/200" alt="Bệnh trứng cá">
+                <div class="disease-card-content">
+                    <h3>Trứng cá</h3>
+                    <p>Bệnh da phổ biến ở thanh thiếu niên với các mụn và sẹo.</p>
+                    <a href="#" class="read-more">Tìm hiểu thêm <i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="disease-card">
+                <img src="/api/placeholder/400/200" alt="Nấm da">
+                <div class="disease-card-content">
+                    <h3>Nấm da</h3>
+                    <p>Nhiễm nấm trên da gây đỏ, ngứa và bong tróc.</p>
+                    <a href="#" class="read-more">Tìm hiểu thêm <i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2025 DERMASCOPE - Hệ thống chẩn đoán bệnh ngoài da thông minh</p>
+        <div class="footer-links">
+            <a href="#">Về chúng tôi</a>
+            <a href="#">Điều khoản sử dụng</a>
+            <a href="#">Chính sách bảo mật</a>
+            <a href="#">Liên hệ</a>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
