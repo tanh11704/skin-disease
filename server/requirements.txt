@@ -3,3 +3,7 @@ pymysql
 tensorflow
 pillow
 numpy
+torch
+torchvision
+opencv-python
+django-cors-headers
