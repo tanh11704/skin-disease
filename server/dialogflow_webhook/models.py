@@ -5,8 +5,8 @@ class Disease(models.Model):
     name = models.CharField(max_length=255)
     definition = models.TextField()
     symptoms = models.TextField()
-    causes = models.TextField()
-    treatments = models.TextField()
+    cause = models.TextField()
+    treatment = models.TextField()
     id = models.AutoField(primary_key=True)
 
     class Meta:

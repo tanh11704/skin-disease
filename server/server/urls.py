@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('dialogflow_webhook.urls')),
     path('api/', include('prediction.urls')),
+    path('api/', include('chatbot.urls'))
 ]

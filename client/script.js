@@ -141,7 +141,7 @@ async function diagnose(event) {
 }
 
 // Hàm chat
-function sendMessage() {
+async function sendMessage() {
     const input = document.getElementById('chatInput');
     const message = input.value.trim();
     
@@ -149,23 +149,27 @@ function sendMessage() {
         addChatMessage('Bạn', message);
         input.value = '';
         
-        // Giả lập phản hồi từ bot sau một khoảng thời gian ngắn
-        setTimeout(() => {
-            let botResponse;
-            
-            // Logic phản hồi đơn giản dựa trên từ khóa
-            if (message.toLowerCase().includes('điều trị') || message.toLowerCase().includes('chữa')) {
-                botResponse = 'Đối với vảy nến, các phương pháp điều trị phổ biến bao gồm:<br>1. Thuốc bôi ngoài da chứa corticosteroid<br>2. Liệu pháp ánh sáng (phototherapy)<br>3. Thuốc uống đặc trị như methotrexate, cyclosporine<br>4. Thuốc sinh học cho các trường hợp nặng<br><br>Tôi khuyên bạn nên gặp bác sĩ da liễu để được tư vấn phương pháp điều trị phù hợp nhất.';
-            } else if (message.toLowerCase().includes('nguyên nhân') || message.toLowerCase().includes('tại sao')) {
-                botResponse = 'Vảy nến có nhiều nguyên nhân, bao gồm:<br>- Yếu tố di truyền (có tính gia đình)<br>- Rối loạn hệ miễn dịch<br>- Các yếu tố kích hoạt như stress, nhiễm trùng, thời tiết lạnh, thuốc, chấn thương da<br>- Lối sống không lành mạnh (hút thuốc, uống rượu)';
-            } else if (message.toLowerCase().includes('phòng ngừa') || message.toLowerCase().includes('tránh')) {
-                botResponse = 'Để phòng ngừa và giảm tần suất bùng phát vảy nến, bạn nên:<br>1. Giữ da ẩm thường xuyên<br>2. Tránh các chất kích thích da<br>3. Giảm stress<br>4. Tránh tổn thương da<br>5. Duy trì lối sống lành mạnh, hạn chế rượu bia và thuốc lá<br>6. Tiếp xúc với ánh nắng vừa phải (dưới sự hướng dẫn y tế)';
-            } else {
-                botResponse = 'Tôi hiểu mối quan tâm của bạn. Để tư vấn chính xác hơn về tình trạng vảy nến, tôi khuyên bạn nên thăm khám bác sĩ da liễu. Bạn còn câu hỏi nào khác về bệnh da liễu không?';
+        try {
+            const response = await fetch('http://localhost:8000/api/dialogflow/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: message
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Lỗi API: ${response.status} - ${response.statusText}`);
             }
-            
-            addChatMessage('Bot', botResponse);
-        }, 800);
+
+            const data = await response.json();
+            addChatMessage('Bot', data.message);
+        } catch (error) {
+            console.error('Lỗi khi gọi API:', error);
+            addChatMessage('Bot', 'Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại sau.');
+        }
     }
 }
 

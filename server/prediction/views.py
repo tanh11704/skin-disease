@@ -27,6 +27,7 @@ class ImageUploadView(APIView):
             response_data = {}
             response_data['prediction'] = predicted_class
             response_data['confidence'] = confidence
+            response_data['image_url'] = instance.image.path
 
-            return Response(response_data, status=status.HTTP_201_CREATED)
+            return Response(response_data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
