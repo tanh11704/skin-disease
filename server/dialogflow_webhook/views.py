@@ -30,28 +30,28 @@ class DialogflowWebhook(APIView):
         if action == 'get_dinh_nghia':
             try:
                 disease = Disease.objects.get(name__iexact=disease_name)
-                fulfillment_text = f"**Định nghĩa của {disease.name}**: {disease.definition}"
+                fulfillment_text = f"Định nghĩa của {disease.name}: {disease.definition}"
             except Disease.DoesNotExist:
                 fulfillment_text = f"Không tìm thấy thông tin về bệnh {disease_name}."
 
         elif action == 'get_trieu_chung':
             try:
                 disease = Disease.objects.get(name__iexact=disease_name)
-                fulfillment_text = f"**Triệu chứng của {disease.name}**: {disease.symptoms}"
+                fulfillment_text = f"Triệu chứng của {disease.name}: {disease.symptoms}"
             except Disease.DoesNotExist:
                 fulfillment_text = f"Không tìm thấy thông tin về bệnh {disease_name}."
 
         elif action == 'get_phuong_phap':
             try:
                 disease = Disease.objects.get(name__iexact=disease_name)
-                fulfillment_text = f"**Phương pháp điều trị {disease.name}**: {disease.treatment}"
+                fulfillment_text = f"Phương pháp điều trị {disease.name}: {disease.treatment}"
             except Disease.DoesNotExist:
                 fulfillment_text = f"Không tìm thấy thông tin về bệnh {disease_name}."
 
         elif action == 'get_nguyen_nhan':
             try:
                 disease = Disease.objects.get(name__iexact=disease_name)
-                fulfillment_text = f"**Nguyên nhân của {disease.name}**: {disease.cause}"
+                fulfillment_text = f"Nguyên nhân của {disease.name}: {disease.cause}"
             except Disease.DoesNotExist:
                 fulfillment_text = f"Không tìm thấy thông tin về bệnh {disease_name}."
                 
