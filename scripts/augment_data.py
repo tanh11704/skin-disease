@@ -4,7 +4,7 @@ import albumentations as A
 from tqdm import tqdm
 
 # Định nghĩa thư mục Train
-train_dir = "data/train"
+train_dir = "./SkinDisease/train"
 
 # Mục tiêu số lượng mẫu tối thiểu cho mỗi lớp
 target_samples = 1000
@@ -30,7 +30,7 @@ for category in tqdm(os.listdir(train_dir), desc="Processing classes"):
         continue  # Bỏ qua nếu không phải thư mục
     
     # Đếm số lượng ảnh hiện tại trong lớp
-    images = [f for f in os.listdir(category_path) if os.path.isfile(os.path.join(category_path, f))]
+    images = [f for f in os.listdir(category_path) if os.path.isfile(os.path.join(category_path, f)) and 'aug' not in f]
     num_images = len(images)
     
     print(f"Class {category}: {num_images} samples")

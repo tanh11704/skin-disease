@@ -8,13 +8,6 @@ matplotlib.use('TkAgg')  # Sử dụng backend không cần GUI
 import numpy as np
 
 def count_data_in_directory(data_dir):
-    """
-    Đếm số lượng file trong mỗi class trong thư mục dữ liệu.
-    Args:
-        data_dir (str): Đường dẫn đến thư mục (train hoặc test)
-    Returns:
-        dict: Số lượng file cho mỗi class
-    """
     class_counts = defaultdict(int)
     
     for class_name in os.listdir(data_dir):
@@ -26,12 +19,6 @@ def count_data_in_directory(data_dir):
     return class_counts
 
 def print_data_summary(train_counts, test_counts):
-    """
-    In tóm tắt số lượng dữ liệu cho từng class và tổng.
-    Args:
-        train_counts (dict): Số lượng file trong tập train
-        test_counts (dict): Số lượng file trong tập test
-    """
     print("\n=== Tóm tắt số lượng dữ liệu ===")
     
     total_train = sum(train_counts.values())
@@ -51,12 +38,6 @@ def print_data_summary(train_counts, test_counts):
     print(f"{'Tổng':<20} {'':<30} {total_train:<10} {total_test:<10} {total_train + total_test:<10}")
 
 def plot_data_distribution(train_counts, test_counts):
-    """
-    Vẽ biểu đồ phân bố dữ liệu cho từng class.
-    Args:
-        train_counts (dict): Số lượng file trong tập train
-        test_counts (dict): Số lượng file trong tập test
-    """
     # Lấy danh sách class và số lượng
     classes = sorted(label_mapping.keys())
     train_values = [train_counts.get(cls, 0) for cls in classes]
@@ -80,12 +61,13 @@ def plot_data_distribution(train_counts, test_counts):
     plt.tight_layout()
     
     # Hiển thị biểu đồ
+    plt.savefig("data_distribution.png")
     plt.show()
 
 if __name__ == "__main__":
     # Đường dẫn đến thư mục train và test
-    train_dir = "../data/train"
-    test_dir = "../data/test"
+    train_dir = "./SkinDisease/train"
+    test_dir = "./SkinDisease/test"
     
     # Đếm số lượng file
     train_counts = count_data_in_directory(train_dir)

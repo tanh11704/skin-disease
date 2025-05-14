@@ -61,7 +61,7 @@ if __name__ == '__main__':
     model = SkinDiseaseModel(num_classes=len(label_mapping.keys())).to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0001, weight_decay=1e-4)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=2, verbose=True)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=2)
 
     if args.checkpoint:
         checkpoint = torch.load(args.checkpoint, map_location=device)
@@ -147,6 +147,7 @@ if __name__ == '__main__':
                 break
             
         scheduler.step(test_loss)
+        print(f"Learning rate hiện tại: {optimizer.param_groups[0]['lr']}")
         
     writer.close()
     print("Training complete.")
