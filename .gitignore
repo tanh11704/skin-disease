@@ -3,3 +3,4 @@
 scripts/__pycache__/
 .DS_Store
 server/models/best_cnn.pt
+newagent-qadf-05b6d218fd0f.json
